@@ -23,6 +23,7 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { FaGithub, FaGoogle } from "react-icons/fa";
 
+// Schema definition for sign-up credentials
 const formSchema = z.object({
     name: z.string().min(1, { message: "Name is required."}),
     email: z.string().email(),
@@ -38,6 +39,7 @@ export const SignUpView = () => {
     const [error, setError] = useState<string | null>(null);
     const [pending, setPending] = useState(false);
 
+    // Initialize form with default values and schema validation
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -48,6 +50,7 @@ export const SignUpView = () => {
         },
     });
 
+    // Handle email/password register
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         setError(null)
         setPending(true);
@@ -73,7 +76,7 @@ export const SignUpView = () => {
 
     };
 
-
+    // Handle social login (GitHub / Google)
     const onSocial = async (provider: "github" | "google") => {
         setError(null)
         setPending(true);
@@ -100,6 +103,7 @@ export const SignUpView = () => {
         <div className="flex flex-col gap-6">
             <Card className="overflow-hidden p-0">
                 <CardContent className="grid p-0 md:grid-cols-2">
+                    {/* Auth Form */}
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 md:p-8">
                             <div className="flex flex-col gap-6">
@@ -112,6 +116,7 @@ export const SignUpView = () => {
                                     </p>
                                 </div>
                                 <div className="grid gap-3">
+                                    {/* Name field */}
                                     <FormField
                                         control={form.control}
                                         name="name"
@@ -131,6 +136,7 @@ export const SignUpView = () => {
                                     />
                                 </div>
                                 <div className="grid gap-3">
+                                    {/* Email field */}
                                     <FormField
                                         control={form.control}
                                         name="email"
@@ -150,6 +156,7 @@ export const SignUpView = () => {
                                     />
                                 </div>
                                 <div className="grid gap-3">
+                                    {/* Password field */}
                                     <FormField
                                         control={form.control}
                                         name="password"
@@ -169,6 +176,7 @@ export const SignUpView = () => {
                                     />
                                 </div>
                                 <div className="grid gap-3">
+                                    {/* Confirm Password field */}
                                     <FormField
                                         control={form.control}
                                         name="confirmPassword"
@@ -187,25 +195,29 @@ export const SignUpView = () => {
                                         )}
                                     />
                                 </div>
+                                {/* Error alert */}
                                 {!!error && (
                                     <Alert className="bg-destructive/10 border-none">
                                         <OctagonAlertIcon className="h-4 w-4 !text-destructive"/>
                                         <AlertTitle>{error}</AlertTitle>
                                     </Alert>
                                 )}
+                                {/* Submit button */}
                                 <Button
                                     disabled={pending}
                                     type="submit"
                                     className="w-full"
                                 >
-                                    Sign in
+                                    Sign up
                                 </Button>
+                                {/* Divider */}
                                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                                     <span className="bg-card text-muted-foreground relative z-10 px-2">
                                         Or continue with
                                     </span>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
+                                    {/* Social login buttons */}
                                     <Button
                                         disabled={pending}
                                         onClick={() => onSocial("google")}
@@ -234,7 +246,8 @@ export const SignUpView = () => {
                             </div>
                         </form>
                     </Form>
-                    <div className="bg-radial from-green-700 to-green-900 relative hidden md:flex flex-col gap-y-4 items-center justify-center">
+                    {/* Branding / Illustration */}
+                    <div className="bg-radial  from-sidebar-accent to-sidebar relative hidden md:flex flex-col gap-y-4 items-center justify-center">
                         <img src="/logo.svg" alt="Image" className="h-[95px] w-[95px]"/>
                         <p className="text-2xl font-semibold text-white">
                             Meet.Ai
@@ -242,7 +255,7 @@ export const SignUpView = () => {
                     </div>
                 </CardContent>
             </Card>
-
+            {/* Terms note */}
             <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
                 By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
             </div>
